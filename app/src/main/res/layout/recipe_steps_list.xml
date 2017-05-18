@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linearParent">
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ingredients"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="10dp"
+            android:onClick="showIngredients"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            card_view:cardBackgroundColor="#BDBDBD">
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/name"
+                android:gravity="center"
+                android:textSize="35dp"
+                tools:text="Ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="Ingredientes"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+        </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/steps_list"
+        android:name="riviasoftware.recipesapp.RecipeListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearParent"
+        tools:context="riviasoftware.recipesapp.ui.RecipeStepsListActivity"
+        tools:listitem="@layout/recipe_steps_list_content" />
+
+
+</RelativeLayout>
+

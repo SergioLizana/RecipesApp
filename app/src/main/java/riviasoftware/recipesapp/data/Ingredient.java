@@ -1,0 +1,62 @@
+package riviasoftware.recipesapp.data;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+/**
+ * Created by sergiolizanamontero on 10/5/17.
+ */
+
+public class Ingredient implements Parcelable {
+    private double quantity;
+
+    public double getQuantity() { return this.quantity; }
+
+    public void setQuantity(double quantity) { this.quantity = quantity; }
+
+    private String measure;
+
+    public String getMeasure() { return this.measure; }
+
+    public void setMeasure(String measure) { this.measure = measure; }
+
+    private String ingredient;
+
+    public String getIngredient() { return this.ingredient; }
+
+    public void setIngredient(String ingredient) { this.ingredient = ingredient; }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.quantity);
+        dest.writeString(this.measure);
+        dest.writeString(this.ingredient);
+    }
+
+    public Ingredient() {
+    }
+
+    protected Ingredient(Parcel in) {
+        this.quantity = in.readDouble();
+        this.measure = in.readString();
+        this.ingredient = in.readString();
+    }
+
+    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel source) {
+            return new Ingredient(source);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
+}
+
