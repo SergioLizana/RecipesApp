@@ -4,23 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/border_linears"
     android:orientation="horizontal">
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        card_view:cardBackgroundColor="#BDBDBD">
-s       <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/shortDesc"
@@ -32,7 +17,4 @@ s       <LinearLayout
             android:layout_margin="@dimen/text_margin"
             android:textAppearance="?attr/textAppearanceListItem" />
 
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
 </LinearLayout>

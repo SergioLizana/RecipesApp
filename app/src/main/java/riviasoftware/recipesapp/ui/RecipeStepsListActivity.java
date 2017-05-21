@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -93,17 +94,13 @@ public class RecipeStepsListActivity extends AppCompatActivity {
     @OnClick(R.id.ingredients)
     public void showIngredients(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        IngredientsAdapter mAdapter = new IngredientsAdapter(recipe.getIngredients(), this);
-        builder.setTitle("test");
-        builder.setAdapter(mAdapter,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                                        int item) {
-                        Toast.makeText(getApplicationContext(), "You selected: ",Toast.LENGTH_LONG);
-                        dialog.dismiss();
-                    }
-                });
+        IngredientsAdapter mAdapter = new IngredientsAdapter(getApplicationContext(),recipe.getIngredients());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialogview,null);
+        RecyclerView recyclerView =  (RecyclerView) dialogView.findViewById(R.id.dialog_list_ingredients);
+        recyclerView.setAdapter(mAdapter);
+        LinearLayoutManager mLinearLayoutManager  = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(mLinearLayoutManager);
+        builder.setView(dialogView);
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(true);
         alert.show();

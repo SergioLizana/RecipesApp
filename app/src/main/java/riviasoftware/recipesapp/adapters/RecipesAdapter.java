@@ -73,8 +73,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
         notifyItemInserted(position);
     }
 
-    public void updateItem(List<Recipe> movies) {
-        data = movies;
+    public void updateItem(List<Recipe> recipes) {
+        data = recipes;
         notifyDataSetChanged();
     }
 
