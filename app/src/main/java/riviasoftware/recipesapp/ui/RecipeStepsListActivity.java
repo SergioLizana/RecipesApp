@@ -1,83 +1,73 @@
 package riviasoftware.recipesapp.ui;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
-
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.adapters.IngredientsAdapter;
 import riviasoftware.recipesapp.adapters.StepsAdapter;
 import riviasoftware.recipesapp.data.Recipe;
 import riviasoftware.recipesapp.data.Step;
 
-/**
- * An activity representing a list of Recipe. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RecipeDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
+
 public class RecipeStepsListActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private boolean mTwoPane;
+    private Unbinder unbinder;
     Recipe recipe;
-    RecyclerView recyclerView;
+    @BindView(R.id.steps_list)
+    RecyclerView mRecyclerStepsList;
+
+    RecyclerView mRecyclerDialogIngredients;
     StepsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_steps_list);
-
-        if (savedInstanceState == null || !savedInstanceState.containsKey("recipes")) {
-
+        unbinder = ButterKnife.bind(this);
+        if (savedInstanceState == null || !savedInstanceState.containsKey("recipe")) {
+            recipe = getIntent().getParcelableExtra("recipe");
         } else {
-
+           recipe = (Recipe) savedInstanceState.get("recipe");
         }
 
-        recipe = getIntent().getParcelableExtra("recipe");
-        Toast.makeText(getApplicationContext(),recipe.getName(), Toast.LENGTH_LONG).show();
+
+
         adapter = new StepsAdapter(getApplicationContext(), recipe.getSteps());
-        recyclerView = (RecyclerView) findViewById(R.id.steps_list);
-        recyclerView.setAdapter(adapter);
+        mRecyclerStepsList.setAdapter(adapter);
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Step item = (Step) v.getTag();
                 Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-                intent.putExtra("recipe", item);
-                Toast.makeText(getApplicationContext(),item.getDescription(),Toast.LENGTH_LONG).show();
+                intent.putExtra("recipe", recipe);
+                intent.putExtra("step",item);
                 startActivity(intent);
 
             }
         });
 
-        LinearLayoutManager mLinearLayoutManager  = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager mLinearLayoutManager =
+                new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
 
-        recyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerStepsList.setLayoutManager(mLinearLayoutManager);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Recipe List");
-
 
 
         if (findViewById(R.id.recipe_detail_container) != null) {
@@ -94,17 +84,24 @@ public class RecipeStepsListActivity extends AppCompatActivity {
     @OnClick(R.id.ingredients)
     public void showIngredients(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        IngredientsAdapter mAdapter = new IngredientsAdapter(getApplicationContext(),recipe.getIngredients());
-        View dialogView = getLayoutInflater().inflate(R.layout.dialogview,null);
-        RecyclerView recyclerView =  (RecyclerView) dialogView.findViewById(R.id.dialog_list_ingredients);
-        recyclerView.setAdapter(mAdapter);
-        LinearLayoutManager mLinearLayoutManager  = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(mLinearLayoutManager);
+        IngredientsAdapter mAdapter = new IngredientsAdapter(getApplicationContext(), recipe.getIngredients());
+        View dialogView = getLayoutInflater().inflate(R.layout.dialogview, null);
+        mRecyclerDialogIngredients = (RecyclerView) dialogView.findViewById(R.id.dialog_list_ingredients);
+        mRecyclerDialogIngredients.setAdapter(mAdapter);
+        LinearLayoutManager mLinearLayoutManager =
+                new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        mRecyclerDialogIngredients.setLayoutManager(mLinearLayoutManager);
         builder.setView(dialogView);
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(true);
         alert.show();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
 }

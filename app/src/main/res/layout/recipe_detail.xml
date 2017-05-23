@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="riviasoftware.recipesapp.ui.RecipeDetailFragment">
 
-    <ImageView
-        android:id="@+id/imagetest"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@android:color/holo_blue_bright"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <ProgressBar
+            android:indeterminate="true"
+            android:layout_width="100dp" android:layout_height="100dp"
+            android:id="@+id/marker_progress" style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </RelativeLayout>
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/playerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
     <TextView
-        android:id="@+id/recipe_detail"
+        android:id="@+id/step_detail"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textIsSelectable="true"
-        android:text="LOREM IPSUM TEST"
-        android:layout_below="@+id/imagetest"/>
+        android:layout_below="@+id/playerView"
+        android:visibility="invisible"/>
 </RelativeLayout>

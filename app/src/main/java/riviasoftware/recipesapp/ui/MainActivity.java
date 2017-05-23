@@ -27,11 +27,13 @@ import riviasoftware.recipesapp.retrofit.utils.ApiUtils;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Unbinder unbinder;
     private JSONService jsonService;
     private List<Recipe> recipes;
-    RecyclerView recyclerView;
     private RecipesAdapter adapter;
-    private Unbinder unbinder;
+
+    @BindView(R.id.recipe_list) RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
         jsonService = ApiUtils.getService();
         adapter = new RecipesAdapter(getApplicationContext(), (ArrayList) recipes);
-        recyclerView = (RecyclerView) findViewById(R.id.recipe_list);
         recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Recipe item = (Recipe) v.getTag();
-                Toast.makeText(getApplicationContext(),item.getName(),Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), RecipeStepsListActivity.class);
                 intent.putExtra("recipe", item);
                 startActivity(intent);
