@@ -4,32 +4,51 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import butterknife.OnClick;
 import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.data.Recipe;
+import riviasoftware.recipesapp.data.Step;
 
-/**
- * An activity representing a single Recipe detail screen. This
- * activity is only used narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link RecipeStepsListActivity}.
- */
+
 public class RecipeDetailActivity extends AppCompatActivity {
-
+    RecipeDetailFragment fragment;
+    Step step;
+    Recipe recipe;
+    private int position = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            RecipeDetailFragment fragment = RecipeDetailFragment.newInstance();
+             fragment = RecipeDetailFragment.newInstance();
+            Bundle bundle = new Bundle();
+            recipe = getIntent().getParcelableExtra("recipe");
+            step = getIntent().getParcelableExtra("step");
+            bundle.putParcelable("step",step);
+            bundle.putParcelable("recipe",recipe);
+            fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.recipe_detail_container, fragment)
                     .commit();
         }
+    }
+
+    @OnClick
+    public void next(View view){
+        position++;
+        fragment.releasePlayer();
+        fragment.printView(recipe.getSteps().get(step.getId()+position));
+    }
+
+    @OnClick
+    public void previous(View view){
+        position--;
+        fragment.releasePlayer();
+        fragment.printView(recipe.getSteps().get(step.getId()+position));
     }
 
     @Override

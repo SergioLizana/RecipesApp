@@ -2,6 +2,7 @@ package riviasoftware.recipesapp.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,10 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     TextView stepDetail;
     @BindView(R.id.marker_progress)
     ProgressBar loader;
+    @BindView(R.id.back_floating_button)
+    FloatingActionButton back;
+    @BindView(R.id.next_floating_button)
+    FloatingActionButton next;
 
     private Recipe recipe;
     private Step step;
@@ -64,9 +69,10 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getActivity().getIntent().hasExtra("recipe") || getActivity().getIntent().hasExtra("stepId")) {
-            recipe = getActivity().getIntent().getParcelableExtra("recipe");
-            step = getActivity().getIntent().getParcelableExtra("step");
+
+        if (getArguments().containsKey("recipe") || getArguments().containsKey("recipe")) {
+            recipe =getArguments().getParcelable("recipe");
+            step = getArguments().getParcelable("step");
         }
 
     }
@@ -76,6 +82,14 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        printView(step);
+
+
+        return rootView;
+    }
+
+    public void printView(Step step){
+        this.step = step;
         mPlayerView.setUseArtwork(false);
         if (step.getVideoURL() != null && !step.getVideoURL().isEmpty()) {
             mPlayerView.setVisibility(View.VISIBLE);
@@ -83,35 +97,38 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         }else{
             mPlayerView.setVisibility(View.GONE);
             stepDetail.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
         }
 
         stepDetail.setText(step.getDescription());
 
-
-        return rootView;
     }
 
     private void initializePlayer(Uri mediaUri) {
-        if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity().getApplicationContext(), trackSelector, loadControl);
-            mPlayerView.setPlayer(mExoPlayer);
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(getActivity().getApplicationContext(), "recipesapp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                    getActivity().getApplicationContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.addListener(this);
-            mExoPlayer.setPlayWhenReady(false);
-        }
+            if (mExoPlayer == null) {
+                TrackSelector trackSelector = new DefaultTrackSelector();
+                LoadControl loadControl = new DefaultLoadControl();
+                mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity().getApplicationContext(), trackSelector, loadControl);
+                mPlayerView.setPlayer(mExoPlayer);
+                // Prepare the MediaSource.
+                String userAgent = Util.getUserAgent(getActivity().getApplicationContext(), "recipesapp");
+                MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+                        getActivity().getApplicationContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+                mExoPlayer.prepare(mediaSource);
+                mExoPlayer.addListener(this);
+                mExoPlayer.setPlayWhenReady(false);
+            }
+
     }
 
-    private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+    public void releasePlayer() {
+        if(mExoPlayer!=null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
 
@@ -145,10 +162,14 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
             loader.setVisibility(View.INVISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
             stepDetail.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
         }else{
             loader.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.INVISIBLE);
             stepDetail.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
+            next.setVisibility(View.INVISIBLE);
         }
 
     }
