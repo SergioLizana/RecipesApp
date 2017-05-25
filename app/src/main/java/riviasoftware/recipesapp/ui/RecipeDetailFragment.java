@@ -2,14 +2,12 @@ package riviasoftware.recipesapp.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -47,10 +45,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     TextView stepDetail;
     @BindView(R.id.marker_progress)
     ProgressBar loader;
-    @BindView(R.id.back_floating_button)
-    FloatingActionButton back;
-    @BindView(R.id.next_floating_button)
-    FloatingActionButton next;
+
 
     private Recipe recipe;
     private Step step;
@@ -70,10 +65,12 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         super.onCreate(savedInstanceState);
 
 
-        if (getArguments().containsKey("recipe") || getArguments().containsKey("recipe")) {
+        if (getArguments().containsKey("recipe") || getArguments().containsKey("step")) {
             recipe =getArguments().getParcelable("recipe");
             step = getArguments().getParcelable("step");
         }
+
+
 
     }
 
@@ -97,11 +94,10 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         }else{
             mPlayerView.setVisibility(View.GONE);
             stepDetail.setVisibility(View.VISIBLE);
-            back.setVisibility(View.VISIBLE);
-            next.setVisibility(View.VISIBLE);
         }
 
         stepDetail.setText(step.getDescription());
+
 
     }
 
@@ -162,14 +158,11 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
             loader.setVisibility(View.INVISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
             stepDetail.setVisibility(View.VISIBLE);
-            back.setVisibility(View.VISIBLE);
-            next.setVisibility(View.VISIBLE);
         }else{
             loader.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.INVISIBLE);
             stepDetail.setVisibility(View.INVISIBLE);
-            back.setVisibility(View.INVISIBLE);
-            next.setVisibility(View.INVISIBLE);
+
         }
 
     }

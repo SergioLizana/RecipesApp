@@ -1,36 +1,24 @@
 package riviasoftware.recipesapp.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.widget.Toast;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import riviasoftware.recipesapp.R;
-import riviasoftware.recipesapp.adapters.IngredientsAdapter;
-import riviasoftware.recipesapp.adapters.StepsAdapter;
 import riviasoftware.recipesapp.data.Recipe;
-import riviasoftware.recipesapp.data.Step;
 
 
-public class RecipeStepsListActivity extends AppCompatActivity {
+public class RecipeStepsListActivity extends AppCompatActivity implements RecipeStepsListFragment.onOptionClickListener{
 
     private boolean mTwoPane;
     private Unbinder unbinder;
     Recipe recipe;
-    @BindView(R.id.steps_list)
-    RecyclerView mRecyclerStepsList;
 
-    RecyclerView mRecyclerDialogIngredients;
-    StepsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,59 +32,51 @@ public class RecipeStepsListActivity extends AppCompatActivity {
         }
 
 
+        if (findViewById(R.id.two_panel) != null) {
+            RecipeDetailFragment detailFragment = RecipeDetailFragment.newInstance();
+            Bundle bundle = new Bundle();
+            recipe = getIntent().getParcelableExtra("recipe");
+            bundle.putParcelable("step",recipe.getSteps().get(0));
+            bundle.putParcelable("recipe",recipe);
+            detailFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.recipe_detail_container, detailFragment)
+                    .commit();
 
-        adapter = new StepsAdapter(getApplicationContext(), recipe.getSteps());
-        mRecyclerStepsList.setAdapter(adapter);
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Step item = (Step) v.getTag();
-                Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-                intent.putExtra("recipe", recipe);
-                intent.putExtra("step",item);
-                startActivity(intent);
+            RecipeStepsListFragment fragment = RecipeStepsListFragment.newInstance();
+            Bundle bundle2 = new Bundle();
+            bundle2.putParcelable("recipe",recipe);
+            fragment.setArguments(bundle2);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.steps_list_fragment, fragment)
+                    .commit();
+            mTwoPane = true;
 
-            }
-        });
+        }else{
+            mTwoPane = false;
+            RecipeStepsListFragment fragment = RecipeStepsListFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("recipe",recipe);
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.steps_list_fragment, fragment)
+                    .commit();
+        }
 
-        LinearLayoutManager mLinearLayoutManager =
-                new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
 
-        mRecyclerStepsList.setLayoutManager(mLinearLayoutManager);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Recipe List");
 
 
-        if (findViewById(R.id.recipe_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
+
 
     }
 
 
-    @OnClick(R.id.ingredients)
-    public void showIngredients(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        IngredientsAdapter mAdapter = new IngredientsAdapter(getApplicationContext(), recipe.getIngredients());
-        View dialogView = getLayoutInflater().inflate(R.layout.dialogview, null);
-        mRecyclerDialogIngredients = (RecyclerView) dialogView.findViewById(R.id.dialog_list_ingredients);
-        mRecyclerDialogIngredients.setAdapter(mAdapter);
-        LinearLayoutManager mLinearLayoutManager =
-                new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerDialogIngredients.setLayoutManager(mLinearLayoutManager);
-        builder.setView(dialogView);
-        AlertDialog alert = builder.create();
-        alert.setCanceledOnTouchOutside(true);
-        alert.show();
-
-    }
 
     @Override
     public void onDestroy() {
@@ -104,4 +84,25 @@ public class RecipeStepsListActivity extends AppCompatActivity {
         unbinder.unbind();
     }
 
+    @Override
+    public void onOptionSelected(int position) {
+        if (mTwoPane){
+            RecipeDetailFragment detailFragment = RecipeDetailFragment.newInstance();
+            Bundle bundle = new Bundle();
+            recipe = getIntent().getParcelableExtra("recipe");
+            bundle.putParcelable("step",recipe.getSteps().get(position));
+            bundle.putParcelable("recipe",recipe);
+            detailFragment.setArguments(bundle);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.recipe_detail_container, detailFragment);
+            transaction.commit();
+
+        }else{
+            Intent intent = new Intent(this, RecipeDetailActivity.class);
+                intent.putExtra("recipe", recipe);
+                intent.putExtra("step",recipe.getSteps().get(position));
+                startActivity(intent);
+        }
+        Toast.makeText(this,"POSITION: "+position,Toast.LENGTH_SHORT).show();
+    }
 }

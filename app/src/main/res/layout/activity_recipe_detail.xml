@@ -28,6 +28,32 @@
         android:layout_below="@id/app_bar">
 
     </FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/back_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipe_detail_container"
+        android:layout_marginBottom="39dp"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:onClick="previous"
+        app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/next_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:srcCompat="@drawable/ic_arrow_forward_white_24dp"
+        android:layout_below="@+id/recipe_detail_container"
+        android:onClick="next"
+        android:layout_alignParentEnd="true" />
+
 
 
 </RelativeLayout>

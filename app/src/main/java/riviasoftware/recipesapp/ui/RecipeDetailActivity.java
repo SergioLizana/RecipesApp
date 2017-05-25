@@ -2,12 +2,16 @@ package riviasoftware.recipesapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.data.Recipe;
 import riviasoftware.recipesapp.data.Step;
@@ -17,14 +21,28 @@ public class RecipeDetailActivity extends AppCompatActivity {
     RecipeDetailFragment fragment;
     Step step;
     Recipe recipe;
+    private Unbinder unbinder;
     private int position = 0;
+    @BindView(R.id.back_floating_button)
+    FloatingActionButton back;
+    @BindView(R.id.next_floating_button)
+    FloatingActionButton next;
+
+
+    @Override
+    protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        unbinder = ButterKnife.bind(this);
 
         if (savedInstanceState == null) {
-             fragment = RecipeDetailFragment.newInstance();
+            fragment = RecipeDetailFragment.newInstance();
             Bundle bundle = new Bundle();
             recipe = getIntent().getParcelableExtra("recipe");
             step = getIntent().getParcelableExtra("step");
