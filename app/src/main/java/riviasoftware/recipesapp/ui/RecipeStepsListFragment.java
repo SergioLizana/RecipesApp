@@ -83,10 +83,6 @@ public class RecipeStepsListFragment extends Fragment {
             public void onClick(View v) {
                 step = (Step) v.getTag();
                 mCallback.onOptionSelected(step.getId());
-                /*Intent intent = new Intent(getActivity().getApplicationContext(), RecipeDetailActivity.class);
-                intent.putExtra("recipe", recipe);
-                intent.putExtra("step",step);
-                startActivity(intent);*/
             }
         });
 
@@ -120,6 +116,7 @@ public class RecipeStepsListFragment extends Fragment {
         builder.setView(dialogView);
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(true);
+        alert.setCancelable(true);
         alert.show();
 
     }

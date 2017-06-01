@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private RecipesAdapter adapter;
 
     @BindView(R.id.recipe_list) RecyclerView recyclerView;
+    @BindView(R.id.loading) ProgressBar progressBar;
 
 
     @Override
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             recipes = savedInstanceState.getParcelableArrayList("recipes");
         }
+
 
         jsonService = ApiUtils.getService();
         adapter = new RecipesAdapter(getApplicationContext(), (ArrayList) recipes);
@@ -77,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         response.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 adapter.updateItem(response.body());
             }
 

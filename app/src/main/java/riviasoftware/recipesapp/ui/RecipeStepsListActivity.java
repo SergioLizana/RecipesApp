@@ -63,10 +63,6 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
                     .commit();
         }
 
-
-
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Recipe List");

@@ -1,12 +1,20 @@
 package riviasoftware.recipesapp.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,14 +25,16 @@ import riviasoftware.recipesapp.data.Recipe;
 import riviasoftware.recipesapp.data.Step;
 
 
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailFragment.CallbackStateReady{
     RecipeDetailFragment fragment;
     Step step;
     Recipe recipe;
     private Unbinder unbinder;
     private int position = 0;
+    @Nullable
     @BindView(R.id.back_floating_button)
     FloatingActionButton back;
+    @Nullable
     @BindView(R.id.next_floating_button)
     FloatingActionButton next;
 
@@ -38,6 +48,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+           getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+
         setContentView(R.layout.activity_recipe_detail);
         unbinder = ButterKnife.bind(this);
 
@@ -73,15 +95,19 @@ public class RecipeDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             navigateUpTo(new Intent(this, RecipeStepsListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStateReady() {
+
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE){
+            next.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+        }
+
     }
 }

@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:id="@+id/recipe_list"
-    tools:context="riviasoftware.recipesapp.ui.MainActivity"
-    tools:listitem="@layout/recipe_list_content"
-    >
+    android:layout_width="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <ProgressBar
+            android:indeterminate="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/loading" style="?android:attr/progressBarStyle"
+            android:visibility="visible"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5"
+        android:id="@+id/recipe_list"
+        android:visibility="invisible"
+        tools:context="riviasoftware.recipesapp.ui.MainActivity"
+        tools:listitem="@layout/recipe_list_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
