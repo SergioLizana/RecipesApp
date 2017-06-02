@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/view_detail"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="riviasoftware.recipesapp.ui.RecipeDetailFragment">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <ProgressBar
+            android:indeterminate="true"
+            android:layout_width="100dp" android:layout_height="100dp"
+            android:id="@+id/marker_progress" style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </RelativeLayout>
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/playerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/step_detail"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="16dp"
+        tools:text="RECIPE TEXT"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/playerView"/>
+
+
+
+</RelativeLayout>

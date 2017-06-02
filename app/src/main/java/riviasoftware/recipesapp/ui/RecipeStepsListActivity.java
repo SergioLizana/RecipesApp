@@ -13,7 +13,7 @@ import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.data.Recipe;
 
 
-public class RecipeStepsListActivity extends AppCompatActivity implements RecipeStepsListFragment.onOptionClickListener{
+public class RecipeStepsListActivity extends AppCompatActivity implements RecipeStepsListFragment.onOptionClickListener, RecipeDetailFragment.CallbackStateReady{
 
     private boolean mTwoPane;
     private Unbinder unbinder;
@@ -99,6 +99,10 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
                 intent.putExtra("step",recipe.getSteps().get(position));
                 startActivity(intent);
         }
-        Toast.makeText(this,"POSITION: "+position,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStateReady() {
+        Toast.makeText(this,"state ready",Toast.LENGTH_SHORT);
     }
 }

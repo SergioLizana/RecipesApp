@@ -121,15 +121,19 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         }
         printView(step);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
             hideSystemUI();
             mPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-
         }
 
 
         return rootView;
+    }
+
+    public static boolean isTablet(Context context) {
+
+        return context.getResources().getBoolean(R.bool.isTablet);
     }
 
     @Override
@@ -157,8 +161,9 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
             initializePlayer(Uri.parse(step.getVideoURL()));
         }else{
             mPlayerView.setVisibility(View.GONE);
-            stepDetail.setText(step.getDescription());
+            stepDetail.setVisibility(View.VISIBLE);
         }
+        stepDetail.setText(step.getDescription());
 
 
 
@@ -235,7 +240,8 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         if (playbackState == ExoPlayer.STATE_READY) {
             loader.setVisibility(View.INVISIBLE);
             mPlayerView.setVisibility(View.VISIBLE);
-            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d("istablet",String.valueOf(isTablet(getActivity().getApplicationContext())));
+            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
                 stepDetail.setVisibility(View.VISIBLE);
             }
             if (callback != null) {
@@ -245,7 +251,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         }else{
             loader.setVisibility(View.VISIBLE);
             mPlayerView.setVisibility(View.INVISIBLE);
-            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
                 stepDetail.setVisibility(View.INVISIBLE);
             }
 
