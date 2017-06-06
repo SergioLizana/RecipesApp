@@ -3,4 +3,9 @@
     <string name="title_recipe_detail">Recipe Detail</string>
     <string name="servings_string">servings</string>
     <string name="ingredient_string">Ingredients</string>
+    <string name="preference_file_key">recipe</string>
+    <string name="recipe_selected">recipeSelected</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
 </resources>

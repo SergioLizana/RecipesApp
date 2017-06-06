@@ -1,21 +1,28 @@
 package riviasoftware.recipesapp.ui;
 
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import riviasoftware.recipesapp.R;
+import riviasoftware.recipesapp.RecipesWidget;
 import riviasoftware.recipesapp.adapters.IngredientsAdapter;
 import riviasoftware.recipesapp.adapters.StepsAdapter;
 import riviasoftware.recipesapp.data.Recipe;
@@ -91,8 +98,31 @@ public class RecipeStepsListFragment extends Fragment {
 
 
         mRecyclerStepsList.setLayoutManager(mLinearLayoutManager);
-
+        savePreferences();
+        updateWidget();
         return rootView;
+    }
+
+    public void savePreferences(){
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(recipe);
+        editor.putString(getString(R.string.recipe_selected), json);
+        editor.commit();
+
+    }
+
+    public void updateWidget (){
+        AppWidgetManager man = AppWidgetManager.getInstance(getActivity());
+        int[] ids = man.getAppWidgetIds(
+                new ComponentName(getActivity(),RecipesWidget.class));
+        Intent updateIntent = new Intent();
+        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateIntent.putExtra(RecipesWidget.WIDGET_ID_KEY, ids);
+        updateIntent.putExtra(RecipesWidget.RECIPE_ID_KEY, recipe);
+        getActivity().sendBroadcast(updateIntent);
     }
 
     @Override
