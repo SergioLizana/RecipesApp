@@ -4,9 +4,12 @@ import android.app.LauncherActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -21,31 +24,36 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
     private Context context = null;
-    private int appWidgetId;
     private Recipe recipe;
 
 
-    public ListProvider(Context context, Intent intent) {
+    public ListProvider(Context context) {
         this.context = context;
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
-        recipe = intent.getParcelableExtra("recipe");
-
-        populateListItem();
     }
 
     private void populateListItem() {
+        SharedPreferences preferences =
+                context.getSharedPreferences(context.getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+
+        if (preferences.contains(context.getString(R.string.recipe_selected))) {
+            recipe = gson.fromJson(preferences.getString(context.getString(R.string.recipe_selected), ""),
+                    Recipe.class);
+        }
         ingredients = recipe.getIngredients();
     }
 
 
     @Override
     public void onCreate() {
-        ingredients = new ArrayList<Ingredient>();
+
     }
+
 
     @Override
     public void onDataSetChanged() {
+        populateListItem();
 
     }
 
@@ -61,32 +69,15 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews remoteView = new RemoteViews(
-                context.getPackageName(), R.layout.ingredients_alert_list);
-        Ingredient ingredient = ingredients.get(position);
-        remoteView.setTextViewText(R.id.ingredientName, ingredient.getIngredient());
-        remoteView.setTextViewText(R.id.ingredientAmount, ingredient.getQuantity() + ingredient.getMeasure());
 
-        Bundle extras = new Bundle();
-
-        extras.putInt(WidgetService.EXTRA_ITEM, position);
-
-        Intent fillInIntent = new Intent();
-
-        fillInIntent.putExtra("homescreen_meeting",ingredient);
-
-        fillInIntent.putExtras(extras);
-
-        // Make it possible to distinguish the individual on-click
-
-        // action of a given item
-
-        remoteView.setOnClickFillInIntent(R.id.ingredientName, fillInIntent);
-
+        final RemoteViews remoteView = new RemoteViews(context.getPackageName(),R.layout.ingredients_alert_list);
+        String ingredientName = ingredients.get(position).getIngredient();
+        String ammount = ingredients.get(position).getQuantity() + " "+ ingredients.get(position).getMeasure();
+        remoteView.setTextViewText(R.id.ingredientName,ingredientName);
+        remoteView.setTextViewText(R.id.ingredientAmount,ammount);
 
 
         return remoteView;
-
     }
 
     @Override
@@ -96,7 +87,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override

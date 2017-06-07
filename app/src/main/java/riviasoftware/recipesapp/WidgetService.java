@@ -13,11 +13,8 @@ import riviasoftware.recipesapp.data.Recipe;
 
 public class WidgetService extends RemoteViewsService {
 
-    public static final String EXTRA_ITEM = "item";
-
     public RemoteViewsService.RemoteViewsFactory onGetViewFactory(Intent intent) {
-
-        return new ListProvider(this.getApplicationContext(), intent);
+        return new ListProvider(this.getApplicationContext());
 
     }
 }
