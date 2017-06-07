@@ -2,6 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/border_linears"
+    android:id="@+id/widget_layout"
     android:padding="@dimen/widget_margin">
     <LinearLayout
         android:id="@+id/linear_title"

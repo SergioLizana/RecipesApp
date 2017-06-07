@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import riviasoftware.recipesapp.data.Recipe;
 import riviasoftware.recipesapp.ui.MainActivity;
+import riviasoftware.recipesapp.ui.RecipeStepsListActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,38 +42,18 @@ public class RecipesWidget extends AppWidgetProvider {
     }
 
     private void update(Context context, AppWidgetManager appWidgetManager,int id){
-                 /*Intent svcIntent = new Intent(context, WidgetService.class);
-                 //passing app widget id to that RemoteViews Service
-                 svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids[i]);
-                 svcIntent.setData(Uri.parse(
-                         svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-                // svcIntent.putExtra("recipe", recipe);
-
-
-
-                 views.setRemoteAdapter(ids[i],R.id.list_view_widget, svcIntent);
-
-                 Intent startActivityIntent = new Intent(context,MainActivity.class);
-
-                 PendingIntent startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                 views.setPendingIntentTemplate(R.id.list_view_widget, startActivityPendingIntent);
-
-                 // The empty view is displayed when the collection has no items.
-
-                 // It should be in the same layout used to instantiate the RemoteViews  object above.
-
-               //  views.setEmptyView(R.id.list_view_widget, R.id.emptyview);
-*/
-                /* appWidgetManager.notifyAppWidgetViewDataChanged(ids[i], R.id.list_view_widget);
-
-                // appWidgetManager.updateAppWidget(componentName, views);
-                 appWidgetManager.updateAppWidget(ids,views);*/
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipes_widget);
 
         views.setTextViewText(R.id.widget_title,context.
                 getString(R.string.widget_title)+" "+getRecipeFromSharedPreferences().getName());
+
+        Intent configIntent = new Intent(context, RecipeStepsListActivity.class);
+        configIntent.putExtra("recipe",getRecipeFromSharedPreferences());
+        PendingIntent configPendingIntent =  PendingIntent.getActivity(context, 1, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        views.setOnClickPendingIntent(R.id.widget_layout, configPendingIntent);
 
         setRemoteAdapter(context,views);
         appWidgetManager.updateAppWidget(id,views);
