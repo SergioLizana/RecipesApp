@@ -12,9 +12,10 @@
         android:layout_centerVertical="true">
         <ProgressBar
             android:indeterminate="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/loading" style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/width_loader"
+            android:layout_height="@dimen/height_loader"
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
             android:visibility="visible"
             android:layout_gravity="center_vertical|center_horizontal"/>
     </RelativeLayout>

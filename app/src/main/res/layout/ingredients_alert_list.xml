@@ -6,31 +6,30 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border_linears">
 
-
         <TextView
             android:id="@+id/ingredientName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:textSize="16dp"
-            tools:text="DESCRIPCION"
+            android:layout_marginLeft="@dimen/margin_left_ingredient_name"
+            android:layout_marginTop="@dimen/margin_top_ingredient_name"
+            android:textSize="@dimen/text_size_ingredient_name"
+            tools:text="DESC"
             android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/ingredientAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="@dimen/margin_top_ingredient_amount"
+            android:layout_marginBottom="@dimen/margin_bottom_ingredient_amount"
             android:layout_centerHorizontal="true"
-            android:textColor="#FAFAFA"
-            android:textSize="13dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            tools:text="CANTIDAD"
+            android:textColor="@color/background_white_ingredient"
+            android:textSize="@dimen/text_size_ingredient_amount"
+            android:paddingTop="@dimen/padding_top_ingredient_amount"
+            android:paddingBottom="@dimen/padding_bottom_ingredient_amount"
+            android:paddingLeft="@dimen/padding_left_ingredient_amount"
+            android:paddingRight="@dimen/padding_right_ingredient_amount"
+            tools:text="amount"
             android:background="@drawable/rounded_corner"
             android:layout_below="@id/ingredientName"/>
     </RelativeLayout>

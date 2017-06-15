@@ -15,7 +15,8 @@
         android:id="@+id/relativeLayout">
         <ProgressBar
             android:indeterminate="true"
-            android:layout_width="100dp" android:layout_height="100dp"
+            android:layout_width="@dimen/width_loader"
+            android:layout_height="@dimen/height_loader"
             android:id="@+id/marker_progress" style="?android:attr/progressBarStyle"
             android:visibility="invisible"
             android:layout_gravity="center_vertical|center_horizontal"/>
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         tools:text="RECIPE TEXT"
         android:visibility="invisible"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_top_recipe_detail"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/playerView"/>
 

@@ -10,7 +10,7 @@
         <TextView
             android:id="@+id/shortDesc"
             android:gravity="center"
-            android:textSize="35dp"
+            android:textSize="@dimen/text_size_list_content"
             tools:text="Recipe Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

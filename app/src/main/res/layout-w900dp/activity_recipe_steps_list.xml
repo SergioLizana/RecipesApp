@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/two_panel"
-    android:background="#E0E0E0"
+    android:background="@color/background_primary"
     tools:context="riviasoftware.recipesapp.ui.RecipeStepsListActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -26,9 +26,9 @@
     <FrameLayout
         android:id="@+id/steps_list_fragment"
         android:layout_height="match_parent"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/width_list_fragment_tablet"
         android:layout_below="@id/app_bar"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_frames_tablet"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </FrameLayout>
@@ -37,9 +37,9 @@
         android:id="@+id/recipe_detail_container"
         android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
-        android:layout_width="700dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="@dimen/width_detail_fragment_tablet"
+        android:layout_marginStart="@dimen/margin_start_detail_tablet"
+        android:layout_marginTop="@dimen/margin_frames_tablet"
         android:layout_toRightOf="@id/steps_list_fragment"
         android:layout_toEndOf="@id/steps_list_fragment">
     </FrameLayout>

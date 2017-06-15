@@ -8,7 +8,7 @@
         android:id="@+id/linear_title"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/heigth_widget"
         android:layout_gravity="left|center_vertical" >
 
         <TextView
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
-            android:padding="15dp"
+            android:padding="@dimen/padding_textview_widget"
             />
 
 

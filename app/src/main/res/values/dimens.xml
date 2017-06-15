@@ -4,6 +4,43 @@
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="item_width">300dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="width_loader">100dp</dimen>
+    <dimen name="height_loader">100dp</dimen>
+    <dimen name="margin_frames_tablet">10dp</dimen>
+    <dimen name="margin_start_detail_tablet">20dp</dimen>
+    <dimen name="width_detail_fragment_tablet">700dp</dimen>
+    <dimen name="width_list_fragment_tablet">300dp</dimen>
+    <dimen name="text_size_title_ingredients">25dp</dimen>
+    <dimen name="margin_top_ingredients">12dp</dimen>
+    <dimen name="margin_left_ingredient_name">20dp</dimen>
+    <dimen name="margin_top_ingredient_name">10dp</dimen>
+    <dimen name="text_size_ingredient_name">16dp</dimen>
+    <dimen name="text_size_ingredient_amount">13dp</dimen>
+    <dimen name="margin_top_ingredient_amount">5dp</dimen>
+    <dimen name="margin_bottom_ingredient_amount">5dp</dimen>
+    <dimen name="padding_top_ingredient_amount">3dp</dimen>
+    <dimen name="padding_bottom_ingredient_amount">3dp</dimen>
+    <dimen name="padding_left_ingredient_amount">10dp</dimen>
+    <dimen name="padding_right_ingredient_amount">10dp</dimen>
+    <dimen name="margin_top_recipe_detail">20dp</dimen>
+    <dimen name="padding_recipe_detail">16dp</dimen>
+    <dimen name="corner_radius_list_content">5dp</dimen>
+    <dimen name="margin_top_list_content">10dp</dimen>
+    <dimen name="margin_bottom_list_content">10dp</dimen>
+    <dimen name="margin_start_list_content">5dp</dimen>
+    <dimen name="margin_end_list_content">5dp</dimen>
+    <dimen name="image_width_list">140dp</dimen>
+    <dimen name="image_height_list">140dp</dimen>
+    <dimen name="text_size_list_content">35dp</dimen>
+    <dimen name="margin_text_list_content">10dp</dimen>
+    <dimen name="text_size_servings_list_content">15dp</dimen>
+    <dimen name="text_size_ingredients_list_content">15dp</dimen>
+    <dimen name="padding_text_ingredient_list_content">5dp</dimen>
+    <dimen name="heigth_widget">50dp</dimen>
+    <dimen name="padding_textview_widget">15dp</dimen>
+    <dimen name="min_heigth_widget">250dp</dimen>
+    <dimen name="min_width_widget">250dp</dimen>
+
 
     <!--
 Refer to App Widget Documentation for margin information

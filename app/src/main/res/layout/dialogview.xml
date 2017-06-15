@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="#FAFAFA"
-        android:textSize="25dp"
-        android:layout_marginTop="18dp"
+        android:textColor="@color/background_white_ingredient"
+        android:textSize="@dimen/text_size_title_ingredients"
+        android:layout_marginTop="@dimen/margin_top_ingredients"
         android:text="Ingredients" />
 
     <android.support.v7.widget.RecyclerView
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_linears"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/margin_top_ingredients"
         tools:context="riviasoftware.recipesapp.ui.RecipeStepsListActivity"
         tools:listitem="@layout/ingredients_alert_list"
         android:layout_below="@+id/title_ingredient"

@@ -9,6 +9,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:background="#000"
+        android:background="@color/background_videoPlayer"
         android:layout_alignParentTop="true">
     </FrameLayout>

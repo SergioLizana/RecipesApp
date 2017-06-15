@@ -11,11 +11,11 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp">
+        card_view:cardCornerRadius="@dimen/corner_radius_list_content"
+        android:layout_marginTop="@dimen/margin_top_list_content"
+        android:layout_marginBottom="@dimen/margin_bottom_list_content"
+        android:layout_marginStart="@dimen/margin_start_list_content"
+        android:layout_marginEnd="@dimen/margin_end_list_content">
         <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/image_recipe"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
+                    android:layout_width="@dimen/image_width_list"
+                    android:layout_height="@dimen/image_height_list"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/recipe_icon_md"
@@ -42,18 +42,18 @@
         <TextView
             android:id="@+id/name"
             android:gravity="center"
-            android:textSize="35dp"
+            android:textSize="@dimen/text_size_list_content"
             tools:text="Recipe Name"
             android:layout_toRightOf="@+id/image_cardview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/margin_text_list_content"
             android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/servings"
                 android:gravity="center"
-                android:textSize="15dp"
+                android:textSize="@dimen/text_size_servings_list_content"
                 tools:text="8 servings"
                 android:layout_below="@+id/name"
                 android:layout_toRightOf="@+id/image_cardview"
@@ -65,17 +65,17 @@
             <TextView
                 android:id="@+id/n_ingredients"
                 android:gravity="center"
-                android:textSize="15dp"
+                android:textSize="@dimen/text_size_ingredients_list_content"
                 tools:text="15 ingredientes"
                 android:layout_below="@+id/servings"
                 android:layout_toRightOf="@+id/image_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/margin_text_list_content"
                 android:background="@drawable/rounded_corner"
-                android:textColor="#FAFAFA"
-                android:padding="5dp"
+                android:textColor="@color/background_white_ingredient"
+                android:padding="@dimen/padding_text_ingredient_list_content"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
     </RelativeLayout>
