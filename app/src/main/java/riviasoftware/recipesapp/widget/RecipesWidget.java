@@ -1,23 +1,18 @@
-package riviasoftware.recipesapp;
+package riviasoftware.recipesapp.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
 
+import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.data.Recipe;
-import riviasoftware.recipesapp.ui.MainActivity;
 import riviasoftware.recipesapp.ui.RecipeStepsListActivity;
 
 /**
@@ -46,10 +41,10 @@ public class RecipesWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipes_widget);
 
         views.setTextViewText(R.id.widget_title,context.
-                getString(R.string.widget_title)+" "+getRecipeFromSharedPreferences().getName());
+                getString(R.string.widget_title)+" "+getRecipeFromSharedPreferences(context).getName());
 
         Intent configIntent = new Intent(context, RecipeStepsListActivity.class);
-        configIntent.putExtra("recipe",getRecipeFromSharedPreferences());
+        configIntent.putExtra("recipe",getRecipeFromSharedPreferences(context));
         PendingIntent configPendingIntent =  PendingIntent.getActivity(context, 1, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
@@ -61,7 +56,7 @@ public class RecipesWidget extends AppWidgetProvider {
 
     }
 
-    public Recipe getRecipeFromSharedPreferences(){
+    public Recipe getRecipeFromSharedPreferences(Context context){
         SharedPreferences preferences =
                 context.getSharedPreferences(context.getString(R.string.preference_file_key),Context.MODE_PRIVATE);
         Gson gson = new Gson();

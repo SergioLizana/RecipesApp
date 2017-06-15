@@ -1,6 +1,5 @@
 package riviasoftware.recipesapp.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -8,16 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -50,16 +44,15 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
 
     private Unbinder unbinder;
     private SimpleExoPlayer mExoPlayer;
+
     @BindView(R.id.playerView)
     SimpleExoPlayerView mPlayerView;
-
-    @Nullable
-    @BindView(R.id.step_detail)
+    @Nullable @BindView(R.id.step_detail)
     TextView stepDetail;
-
     @BindView(R.id.marker_progress)
     ProgressBar loader;
-
+    FloatingActionButton next;
+    FloatingActionButton back;
 
 
     private Recipe recipe;
@@ -99,6 +92,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     public void onAttach(Context context) {
         super.onAttach(context);
         callback = (CallbackStateReady)context;
+
     }
 
     @Override
@@ -119,9 +113,16 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         if(savedInstanceState != null && savedInstanceState.containsKey("bufferPosition")){
             position = savedInstanceState.getLong("bufferPosition");
         }
+
+        if (!isTablet(getActivity().getApplicationContext())) {
+            next = ((RecipeDetailActivity) getActivity()).next;
+            back = ((RecipeDetailActivity) getActivity()).back;
+        }
+
         printView(step);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                && !isTablet(getActivity().getApplicationContext())) {
             hideSystemUI();
             mPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -163,13 +164,30 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
             mPlayerView.setVisibility(View.GONE);
             stepDetail.setVisibility(View.VISIBLE);
         }
-        stepDetail.setText(step.getDescription());
+
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
+            stepDetail.setText(step.getDescription());
+        }
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())){
+            checkVisibilityButtons();
+        }
 
 
 
+    }
 
+    public void checkVisibilityButtons(){
 
-
+        if (step.getId() == 0){
+            back.setVisibility(View.INVISIBLE);
+            next.setVisibility(View.VISIBLE);
+        }else if (step.getId() >= recipe.getSteps().size()-1) {
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.VISIBLE);
+        }else{
+            next.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -238,28 +256,40 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState == ExoPlayer.STATE_READY) {
-            loader.setVisibility(View.INVISIBLE);
-            mPlayerView.setVisibility(View.VISIBLE);
-            Log.d("istablet",String.valueOf(isTablet(getActivity().getApplicationContext())));
-            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
-                stepDetail.setVisibility(View.VISIBLE);
-            }
+            showUI();
             if (callback != null) {
                 callback.onStateReady();
             }
-
         }else{
-            loader.setVisibility(View.VISIBLE);
-            mPlayerView.setVisibility(View.INVISIBLE);
-            if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
-                stepDetail.setVisibility(View.INVISIBLE);
-            }
+           hideUI();
+        }
 
+    }
 
-
-
+    public void hideUI(){
+        loader.setVisibility(View.VISIBLE);
+        mPlayerView.setVisibility(View.INVISIBLE);
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
+            stepDetail.setVisibility(View.INVISIBLE);
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
 
         }
+    }
+
+
+    public void showUI(){
+        loader.setVisibility(View.INVISIBLE);
+        mPlayerView.setVisibility(View.VISIBLE);
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
+            stepDetail.setVisibility(View.VISIBLE);
+
+        }
+
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
+            checkVisibilityButtons();
+        }
+
 
     }
 

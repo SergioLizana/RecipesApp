@@ -1,4 +1,4 @@
-package riviasoftware.recipesapp;
+package riviasoftware.recipesapp.widget;
 
 import android.app.LauncherActivity;
 import android.appwidget.AppWidgetManager;
@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import riviasoftware.recipesapp.R;
 import riviasoftware.recipesapp.data.Ingredient;
 import riviasoftware.recipesapp.data.Recipe;
 

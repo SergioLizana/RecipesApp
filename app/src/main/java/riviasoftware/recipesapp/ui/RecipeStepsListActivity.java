@@ -1,11 +1,15 @@
 package riviasoftware.recipesapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -92,6 +96,8 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.recipe_detail_container, detailFragment);
             transaction.commit();
+            savePreferences();
+
 
         }else{
             Intent intent = new Intent(this, RecipeDetailActivity.class);
@@ -99,6 +105,17 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
                 intent.putExtra("step",recipe.getSteps().get(position));
                 startActivity(intent);
         }
+    }
+
+    public void savePreferences(){
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(recipe);
+        editor.putString(getString(R.string.recipe_selected), json);
+        editor.commit();
+
     }
 
     @Override

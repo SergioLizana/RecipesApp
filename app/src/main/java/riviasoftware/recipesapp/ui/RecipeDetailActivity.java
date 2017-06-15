@@ -26,16 +26,16 @@ import riviasoftware.recipesapp.data.Step;
 
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailFragment.CallbackStateReady{
+
     RecipeDetailFragment fragment;
     Step step;
     Recipe recipe;
     private Unbinder unbinder;
     private int position = 0;
-    @Nullable
-    @BindView(R.id.back_floating_button)
+
+    @Nullable @BindView(R.id.back_floating_button)
     FloatingActionButton back;
-    @Nullable
-    @BindView(R.id.next_floating_button)
+    @Nullable @BindView(R.id.next_floating_button)
     FloatingActionButton next;
 
 
@@ -49,16 +49,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-
-           getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
 
         setContentView(R.layout.activity_recipe_detail);
         unbinder = ButterKnife.bind(this);
@@ -75,6 +65,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
                     .add(R.id.recipe_detail_container, fragment)
                     .commit();
         }
+
+
     }
 
     @OnClick
@@ -91,6 +83,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         fragment.printView(recipe.getSteps().get(step.getId()+position));
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -103,11 +97,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     @Override
     public void onStateReady() {
-
-        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE){
-            next.setVisibility(View.VISIBLE);
-            back.setVisibility(View.VISIBLE);
-        }
 
     }
 }

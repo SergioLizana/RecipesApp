@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:id="@+id/relativeLayout">
         <ProgressBar
             android:indeterminate="true"
             android:layout_width="100dp" android:layout_height="100dp"
@@ -31,12 +32,12 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         tools:text="RECIPE TEXT"
-        tools:visibility="visible"
         android:visibility="invisible"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/playerView"/>
+        android:layout_below="@+id/playerView"/>
+
 
 
 
