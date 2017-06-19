@@ -1,7 +1,11 @@
 package riviasoftware.recipesapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -70,26 +74,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         recyclerView.setLayoutManager(mGridVerticalLayoutManager);
+
         loadRecipes();
 
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public void loadRecipes() {
 
-        Call<List<Recipe>> response = jsonService.getRecipes();
-        response.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                progressBar.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                adapter.updateItem(response.body());
+        if (isNetworkAvailable()) {
+            if (progressBar.getVisibility() == View.INVISIBLE) {
+                progressBar.setVisibility(View.VISIBLE);
             }
+            Call<List<Recipe>> response = jsonService.getRecipes();
+            response.enqueue(new Callback<List<Recipe>>() {
+                @Override
+                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    adapter.updateItem(response.body());
+                }
 
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.d("Failure","Conexion failed");
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                    showNetworkError();
+                }
+            });
+        }else{
+            showNetworkError();
+        }
+    }
+
+    public void showNetworkError(){
+        progressBar.setVisibility(View.INVISIBLE);
+        Snackbar snackbar = Snackbar
+                .make(recyclerView, getString(R.string.network_error), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.refresh), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loadRecipes();
+                    }
+                });
+
+        snackbar.show();
     }
 
     @Override

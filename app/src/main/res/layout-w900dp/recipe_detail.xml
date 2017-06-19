@@ -21,14 +21,27 @@
             android:visibility="invisible"
             android:layout_gravity="center_vertical|center_horizontal"/>
     </RelativeLayout>
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
+    <RelativeLayout
+        android:id="@+id/video_image_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true">
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/playerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:visibility="gone"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <ImageView
+            android:id="@+id/thumbnail_detail"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            app:srcCompat="@drawable/cooking_icon" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/step_detail"
@@ -41,7 +54,7 @@
         tools:visibility="visible"
         android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/playerView"/>
+        android:layout_below="@id/video_image_container"/>
 
 
 

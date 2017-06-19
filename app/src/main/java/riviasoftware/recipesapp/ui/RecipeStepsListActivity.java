@@ -114,12 +114,12 @@ public class RecipeStepsListActivity extends AppCompatActivity implements Recipe
         Gson gson = new Gson();
         String json = gson.toJson(recipe);
         editor.putString(getString(R.string.recipe_selected), json);
-        editor.commit();
+        editor.apply();
 
     }
 
     @Override
     public void onStateReady() {
-        Toast.makeText(this,"state ready",Toast.LENGTH_SHORT);
+
     }
 }

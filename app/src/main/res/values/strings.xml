@@ -9,6 +9,8 @@
     <string name="add_widget">Add widget</string>
     <string name="widget_title">Ingredients of</string>
     <string name="list_empty_text">List Empty</string>
+    <string name="network_error">Network Error please try again</string>
+    <string name="refresh">Refresh</string>
 
 
 </resources>

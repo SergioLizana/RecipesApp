@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -51,6 +54,11 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     TextView stepDetail;
     @BindView(R.id.marker_progress)
     ProgressBar loader;
+    @Nullable @BindView(R.id.thumbnail_detail)
+    ImageView thumbnailImage;
+
+
+    View rootView;
     FloatingActionButton next;
     FloatingActionButton back;
 
@@ -108,7 +116,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+        rootView = inflater.inflate(R.layout.recipe_detail, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         if(savedInstanceState != null && savedInstanceState.containsKey("bufferPosition")){
             position = savedInstanceState.getLong("bufferPosition");
@@ -126,6 +134,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
             hideSystemUI();
             mPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
         }
 
 
@@ -140,7 +149,9 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong("bufferPosition",mExoPlayer.getCurrentPosition());
+        if (mExoPlayer != null) {
+            outState.putLong("bufferPosition", mExoPlayer.getCurrentPosition());
+        }
     }
 
     private void hideSystemUI() {
@@ -154,40 +165,97 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
 
     public void printView(Step step){
         this.step = step;
-        mPlayerView.setUseArtwork(false);
 
-
-        if (step.getVideoURL() != null && !step.getVideoURL().isEmpty()) {
-            mPlayerView.setVisibility(View.VISIBLE);
-            initializePlayer(Uri.parse(step.getVideoURL()));
-        }else{
-            mPlayerView.setVisibility(View.GONE);
-            stepDetail.setVisibility(View.VISIBLE);
+        if(isTablet(getActivity().getApplicationContext()) ||
+                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+             showPortraitUI();
+        }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            showLandscapeUI();
         }
 
-        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
-            stepDetail.setText(step.getDescription());
-        }
-        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())){
-            checkVisibilityButtons();
-        }
 
 
 
     }
 
-    public void checkVisibilityButtons(){
-
-        if (step.getId() == 0){
-            back.setVisibility(View.INVISIBLE);
-            next.setVisibility(View.VISIBLE);
-        }else if (step.getId() >= recipe.getSteps().size()-1) {
-            next.setVisibility(View.INVISIBLE);
-            back.setVisibility(View.VISIBLE);
-        }else{
-            next.setVisibility(View.VISIBLE);
-            back.setVisibility(View.VISIBLE);
+    public void showLandscapeUI(){
+        if (!isTablet(getActivity().getApplicationContext())) {
+            if (step.getVideoURL() != null && !step.getVideoURL().isEmpty()) {
+                hideButtons();
+                mPlayerView.setUseArtwork(false);
+                stepDetail.setVisibility(View.GONE);
+                thumbnailImage.setVisibility(View.GONE);
+                mPlayerView.setVisibility(View.VISIBLE);
+                rootView.setBackgroundColor(ContextCompat.getColor(getActivity().getApplicationContext(),R.color.background_videoPlayer));
+                initializePlayer(Uri.parse(step.getVideoURL()));
+            }else if (step.getThumbnailURL() != null && !step.getThumbnailURL().isEmpty()) {
+                mPlayerView.setVisibility(View.GONE);
+                thumbnailImage.setVisibility(View.VISIBLE);
+                setThumbnailImage();
+                stepDetail.setVisibility(View.VISIBLE);
+                stepDetail.setText(step.getDescription());
+                rootView.setBackgroundColor(ContextCompat.getColor(getActivity().getApplicationContext(),R.color.background_white_ingredient));
+                checkVisibilityButtons();
+            }else{
+                rootView.setBackgroundColor(ContextCompat.getColor(getActivity().getApplicationContext(),R.color.background_white_ingredient));
+                mPlayerView.setVisibility(View.GONE);
+                thumbnailImage.setVisibility(View.VISIBLE);
+                stepDetail.setVisibility(View.VISIBLE);
+                stepDetail.setText(step.getDescription());
+                checkVisibilityButtons();
+            }
         }
+    }
+
+    public void showPortraitUI(){
+        if (step.getVideoURL() != null && !step.getVideoURL().isEmpty()) {
+            mPlayerView.setUseArtwork(false);
+            mPlayerView.setVisibility(View.VISIBLE);
+            stepDetail.setVisibility(View.VISIBLE);
+            thumbnailImage.setVisibility(View.GONE);
+            initializePlayer(Uri.parse(step.getVideoURL()));
+        }else if (step.getThumbnailURL() != null && !step.getThumbnailURL().isEmpty()) {
+            mPlayerView.setVisibility(View.GONE);
+            thumbnailImage.setVisibility(View.VISIBLE);
+            setThumbnailImage();
+            stepDetail.setVisibility(View.VISIBLE);
+        }else{
+            mPlayerView.setVisibility(View.GONE);
+            thumbnailImage.setVisibility(View.VISIBLE);
+            stepDetail.setVisibility(View.VISIBLE);
+        }
+        stepDetail.setText(step.getDescription());
+        checkVisibilityButtons();
+    }
+
+    public void setThumbnailImage(){
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
+            String imageURL = step.getThumbnailURL();
+            Glide.with(getActivity().getApplicationContext())
+                    .load(imageURL)
+                    .error(R.drawable.cooking_icon)
+                    .into(thumbnailImage);
+        }
+    }
+
+    public void checkVisibilityButtons(){
+        if (!isTablet(getActivity().getApplicationContext())) {
+            if (step.getId() == 0) {
+                back.setVisibility(View.INVISIBLE);
+                next.setVisibility(View.VISIBLE);
+            } else if (step.getId() >= recipe.getSteps().size() - 1) {
+                next.setVisibility(View.INVISIBLE);
+                back.setVisibility(View.VISIBLE);
+            } else {
+                next.setVisibility(View.VISIBLE);
+                back.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    public void hideButtons(){
+        back.setVisibility(View.INVISIBLE);
+        next.setVisibility(View.INVISIBLE);
     }
 
     private void initializePlayer(Uri mediaUri) {
@@ -254,6 +322,14 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     }
 
     @Override
+    public void onPause() {
+        if (mExoPlayer != null) {
+            releasePlayer();
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState == ExoPlayer.STATE_READY) {
             showUI();
@@ -283,7 +359,6 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
         mPlayerView.setVisibility(View.VISIBLE);
         if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE || isTablet(getActivity().getApplicationContext())) {
             stepDetail.setVisibility(View.VISIBLE);
-
         }
 
         if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE && !isTablet(getActivity().getApplicationContext())) {
