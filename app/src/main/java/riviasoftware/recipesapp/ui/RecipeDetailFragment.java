@@ -81,7 +81,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(false);
+        setRetainInstance(true);
         if (getArguments().containsKey("recipe") || getArguments().containsKey("step")) {
             recipe =getArguments().getParcelable("recipe");
             step = getArguments().getParcelable("step");
@@ -149,9 +149,9 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mExoPlayer != null) {
-            outState.putLong("bufferPosition", mExoPlayer.getCurrentPosition());
-        }
+
+            outState.putLong("bufferPosition", position);
+
     }
 
     private void hideSystemUI() {
@@ -290,6 +290,7 @@ public class RecipeDetailFragment extends Fragment implements ExoPlayer.EventLis
 
     public void releasePlayer() {
         if(mExoPlayer!=null) {
+            position = mExoPlayer.getCurrentPosition();
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;

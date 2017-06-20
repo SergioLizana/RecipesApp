@@ -2,6 +2,8 @@ package riviasoftware.recipesapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -62,15 +64,42 @@ public class ExampleInstrumentedTest  {
 
     }
 
+    @Test
+    public void testLoaderDisplayed(){
+        onView(allOf(withId(R.id.loading),isDisplayed()));
+    }
 
     @Test
-    public void testRecyclerSteps(){
+    public void testTextRecyclerView() {
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+               e.printStackTrace();
+        }
+
+        onView(allOf(withId(R.id.recipe_list), isDisplayed()))
+                .check(matches(hasDescendant(withText("Brownies"))));
+    }
+
+    @Test
+    public void testOnClick(){
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.recipe_list),
+                        withParent(allOf(withId(R.id.main_coordinator))),
                         isDisplayed()));
-        recyclerView.check(matches(hasDescendant(withText("Brownies"))));
-        recyclerView.perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        recyclerView.perform(actionOnItemAtPosition(1, click()));
     }
+
+
 
     @Test
     public void useAppContext() throws Exception {
