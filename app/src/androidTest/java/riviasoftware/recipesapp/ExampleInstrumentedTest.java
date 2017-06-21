@@ -1,5 +1,6 @@
 package riviasoftware.recipesapp;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
@@ -22,19 +23,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import riviasoftware.recipesapp.ui.MainActivity;
+import riviasoftware.recipesapp.ui.RecipeDetailActivity;
+import riviasoftware.recipesapp.ui.RecipeStepsListActivity;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.getIdlingResources;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.allOf;
+
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -46,45 +55,12 @@ public class ExampleInstrumentedTest  {
 
     @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void testAppName() {
-        String appName = mActivityRule.getActivity().getString(R.string.app_name);
 
-
-        ViewInteraction appNameTextView = onView(
-                allOf(withText(appName),
-                        childAtPosition(
-                                allOf(withId(R.id.action_bar),
-                                        childAtPosition(
-                                                withId(R.id.action_bar_container),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        appNameTextView.check(matches(withText(appName)));
-
-    }
 
     @Test
-    public void testLoaderDisplayed(){
+    public void testMainActivity(){
+
         onView(allOf(withId(R.id.loading),isDisplayed()));
-    }
-
-    @Test
-    public void testTextRecyclerView() {
-
-        try {
-            Thread.sleep(2500);
-        }catch(Exception e){
-               e.printStackTrace();
-        }
-
-        onView(allOf(withId(R.id.recipe_list), isDisplayed()))
-                .check(matches(hasDescendant(withText("Brownies"))));
-    }
-
-    @Test
-    public void testOnClick(){
-
         try {
             Thread.sleep(2500);
         }catch(Exception e){
@@ -95,37 +71,80 @@ public class ExampleInstrumentedTest  {
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.recipe_list),
                         withParent(allOf(withId(R.id.main_coordinator))),
-                        isDisplayed()));
+                        isDisplayed())).check(matches(hasDescendant(withText("Brownies"))));
         recyclerView.perform(actionOnItemAtPosition(1, click()));
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+
+        ViewInteraction recyclerView2 = onView(
+                allOf(withId(R.id.steps_list), isDisplayed()));
+        recyclerView2.perform(actionOnItemAtPosition(1, click()));
+
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        onView(allOf(withId(R.id.step_detail), isDisplayed()));
+        onView(allOf(withId(R.id.thumbnail_detail), isDisplayed()));
+        ViewInteraction buttonBack = onView(allOf(withId(R.id.back_floating_button),isDisplayed()));
+        buttonBack.perform(click());
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        onView(allOf(withId(R.id.step_detail), isDisplayed()));
+        ViewInteraction video = onView(allOf(withId(R.id.playerView), isDisplayed()));
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+       pressBack();
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        onView(allOf(withId(R.id.ingredients),isDisplayed())).perform(click());
+
+        try {
+            Thread.sleep(2500);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        pressBack();
+
+
     }
+
 
 
 
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = getTargetContext();
 
         assertEquals("riviasoftware.recipesapp", appContext.getPackageName());
     }
 
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
 
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 }

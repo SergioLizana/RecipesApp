@@ -1,11 +1,15 @@
 package riviasoftware.recipesapp.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +53,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
         holder.recipeName.setText(data.get(position).getName());
         holder.servings.setText(data.get(position).getServings()+" "+context.getResources().getString(R.string.servings_string));
         holder.ingredients.setText(data.get(position).getIngredients().size() +" "+ context.getResources().getString(R.string.ingredient_string));
+        String imageURL = data.get(position).getImage();
+        Glide.with(context)
+                .load(imageURL)
+                .error(R.drawable.recipe_icon_md)
+                .into(holder.recipeImage);
         holder.mView.setTag(data.get(position));
         holder.mView.setOnClickListener(this);
     }
@@ -97,6 +106,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
         public final TextView recipeName;
         public final TextView servings;
         public final TextView ingredients;
+        public final ImageView recipeImage;
         public Recipe mItem;
 
         public RecipesAdapterViewHolder(View itemView) {
@@ -105,6 +115,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesA
             recipeName = (TextView) itemView.findViewById(R.id.name);
             servings = (TextView) itemView.findViewById(R.id.servings);
             ingredients = (TextView) itemView.findViewById(R.id.n_ingredients);
+            recipeImage = (ImageView) itemView.findViewById(R.id.image_recipe);
 
 
         }

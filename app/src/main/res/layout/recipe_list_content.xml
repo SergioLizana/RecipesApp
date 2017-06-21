@@ -33,7 +33,7 @@
                     android:layout_height="@dimen/image_height_list"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/recipe_icon_md"
+                    tools:src="@drawable/recipe_icon_md"
                     />
 
             </android.support.v7.widget.CardView>
